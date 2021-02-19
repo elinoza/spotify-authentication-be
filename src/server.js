@@ -10,10 +10,14 @@ const {
   genericErrorHandler,
 } = require("./errorHandlers");
 
+const userRoutes = require("./users/index");
+
 const server = express();
 
 server.use(cors());
 server.use(express.json());
+
+server.use("/users", userRoutes);
 
 server.use(badRequestHandler);
 server.use(forbiddenHandler);
@@ -25,7 +29,7 @@ console.log(listEndPoints(server));
 mongoose.set("debug", true);
 
 mongoose
-  .connect(process.end.MONGO_URI, {
+  .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
