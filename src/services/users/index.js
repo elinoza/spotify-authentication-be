@@ -18,6 +18,32 @@ userRouter.get("/", async (req, res, next) => {
 });
 
 userRouter.get(
+  "/spotifyLogin",
+  passport.authenticate("spotify", { scope: ["profile", "email"] })
+)
+
+userRouter.get(
+  "/spotifyRedirect",
+  passport.authenticate("spotify"),
+  async (req, res, next) => {
+    try {
+    
+      res.cookie("accessToken", req.user.tokens.accessToken, {
+        httpOnly: true,
+      })
+      // res.cookie("refreshToken", req.user.tokens.refreshToken, {
+      //   httpOnly: true,
+      //   path: "/authors/refreshToken",
+      // })
+       res.status(200).redirect("http://localhost:3000/")
+      // res.redirect("http://localhost:3000/"+"?accessToken="+req.user.tokens.accessToken) -->without cookies shitty method:D
+    } catch (error) {
+      next(error)
+    }
+  }
+)
+
+userRouter.get(
   "/googleLogin",
   passport.authenticate("google", { scope: ["profile", "email"] })
 )

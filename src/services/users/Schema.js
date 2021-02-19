@@ -17,6 +17,9 @@ const UserSchema = new Schema(
     },
     googleId:{
       type:String
+    },
+    spotifyId:{
+      type:String
     }
     // refreshTokens: [
     //   {
