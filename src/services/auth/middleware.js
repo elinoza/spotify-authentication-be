@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-const AuthorSchema = require("../authors/schema")
+const UserSchema = require("../users/Schema")
 const { verifyJWT } = require("./tools")
 
 const authorize = async (req, res, next) => {
@@ -9,19 +9,19 @@ const authorize = async (req, res, next) => {
 
     const decoded = await verifyJWT(token)
     
-    const author = await AuthorSchema.findOne({
+    const user = await UserSchema.findOne({
       _id: decoded._id,
     })
-    console.log("author:",author)
+    console.log("user:",user)
 
-    if (!author) {
+    if (!user) {
       throw new Error()
     }
     req.token = token
-    req.author = author
+    req.user = user
     next()
   } catch (e) {
-    const err = new Error("Please authenticate from authorize middleware")
+    const err = new Error("You have no permission , please authenticate")
     err.httpStatusCode = 401
     next(err)
   }
