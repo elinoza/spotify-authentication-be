@@ -10,7 +10,8 @@ const {
   genericErrorHandler,
 } = require("./errorHandlers");
 
-const userRoutes = require("./users/index");
+const userRoutes = require("./services/users/index");
+const artistRoutes = require("./services/api/index");
 
 const server = express();
 
@@ -18,6 +19,7 @@ server.use(cors());
 server.use(express.json());
 
 server.use("/users", userRoutes);
+server.use("/artist", artistRoutes);
 
 server.use(badRequestHandler);
 server.use(forbiddenHandler);
