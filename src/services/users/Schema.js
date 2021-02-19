@@ -3,20 +3,17 @@ const bcrypt = require("bcryptjs");
 
 const UserSchema = new Schema(
   {
-    username: {
-      type: String,
-      unique: true,
-      required: true,
+    name: {
+      type: String
+    },
+    surname: {
+      type: String
     },
     email: {
-      type: String,
-      unique: true,
-      required: true,
+      type: String
     },
     password: {
-      type: String,
-      required: true,
-      min: 6,
+      type: String
     },
     googleId:{
       type:String
