@@ -149,5 +149,19 @@ userRouter.post("/login", async (req, res, next) => {
     next(error);
   }
 });
+userRouter.post("/logout", authorize, async (req, res, next) => {
+  try {
+    // find the user's refresh token
+    req.user.accessToken = req.user.accessToken.filter(
+      (token) => token.token !== req.body.accessToken
+    );
+
+    await req.user.save();
+
+    res.send("Logged out");
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = userRouter;

@@ -64,7 +64,7 @@ passport.use(
           } else {
           const newUser = {
                   spotifyId: profile.id,
-                  name: profile.displayName,
+                  name: profile.displayName, 
                 //   surname: profile.name.familyName,
                   email: profile.email
                   // refreshToken:[]
