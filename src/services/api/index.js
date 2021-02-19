@@ -26,10 +26,9 @@ apiRouter.get("/:genre", async (req, res, next) => {
 
 apiRouter.get("/artist/:id", async (req, res, next) => {
   try {
+    console.log(req.params.id);
     const response = await fetch(
-      "https://deezerdevs-deezer.p.rapidapi.com/artist/" +
-        req.params.id +
-        "/top?limit=50",
+      "https://deezerdevs-deezer.p.rapidapi.com/artist/" + req.params.id,
       {
         headers: {
           "x-rapidapi-key":
@@ -39,7 +38,7 @@ apiRouter.get("/artist/:id", async (req, res, next) => {
       }
     );
     const artist = await response.json();
-    res.send(artist.data);
+    res.send(artist);
   } catch (error) {
     next(error);
   }
@@ -58,7 +57,7 @@ apiRouter.get("/album/:id", async (req, res, next) => {
       }
     );
     const album = await response.json();
-    res.send(album.data);
+    res.send(album);
   } catch (error) {
     next(error);
   }
