@@ -2,6 +2,9 @@ const express = require("express");
 const listEndPoints = require("express-list-endpoints");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const passport = require("passport")
+const cookieParser = require("cookie-parser")
+const oauth = require("./services/auth/oauth")
 
 const {
   notFoundHandler,
@@ -11,13 +14,30 @@ const {
 } = require("./errorHandlers");
 
 const userRoutes = require("./services/users/index");
+
 const artistRoutes = require("./services/api/index");
+
 
 const server = express();
 
-server.use(cors());
-server.use(express.json());
 
+server.use(express.json());
+server.use(cookieParser())
+server.use(passport.initialize())
+
+const whitelist = ["http://localhost:3000"]
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true)
+    } else {
+      callback(new Error("Not allowed by CORS"))
+    }
+  },
+  credentials: true,
+}
+
+server.use(cors(corsOptions));
 server.use("/users", userRoutes);
 server.use("/artist", artistRoutes);
 
