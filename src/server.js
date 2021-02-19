@@ -10,7 +10,7 @@ const {
   genericErrorHandler,
 } = require("./errorHandlers");
 
-const userRoutes = require("./users/index");
+const userRoutes = require("./services/users/index");
 
 const server = express();
 
