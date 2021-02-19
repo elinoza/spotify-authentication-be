@@ -1,6 +1,7 @@
 const express = require("express");
 const UserSchema = require("./Schema");
 const passport = require("passport")
+const fetch = require('node-fetch')
 
 const { authenticate} = require("../auth/tools")
 const { authorize } = require("../auth/middleware")
@@ -9,39 +10,59 @@ const userRouter = express.Router();
 
 // get all users
 userRouter.get("/", async (req, res, next) => {
+
   try {
-    const users = await UserSchema.find();
-    res.status(200).send(users);
+    let response = await fetch(
+      `https://deezerdevs-deezer.p.rapidapi.com/genre/` + "Rock" + `/artists`,
+      {
+        method: "GET",
+        headers: {
+          "x-rapidapi-key": process.env.API_KEY,
+          "x-rapidapi-host": "deezerdevs-deezer.p.rapidapi.com",
+        }}
+        );
+        let artist = await response.json();
+        res.status(200).send(artist.data)
+
+
+    
   } catch (error) {
     next(error);
+    
   }
+  // try {
+  //   const users = await UserSchema.find();
+  //   res.status(200).send(users);
+  // } catch (error) {
+  //   next(error);
+  // }
 });
 
 userRouter.get(
   "/spotifyLogin",
-  passport.authenticate("spotify", { scope: ["profile", "email"] })
+  passport.authenticate("spotify", { scope: ['user-read-email', 'user-read-private'] })
 )
 
-userRouter.get(
-  "/spotifyRedirect",
-  passport.authenticate("spotify"),
-  async (req, res, next) => {
-    try {
+// userRouter.get(
+//   "/spotifyRedirect",
+//   passport.authenticate("spotify"),
+//   async (req, res, next) => {
+//     try {
     
-      res.cookie("accessToken", req.user.tokens.accessToken, {
-        httpOnly: true,
-      })
-      // res.cookie("refreshToken", req.user.tokens.refreshToken, {
-      //   httpOnly: true,
-      //   path: "/authors/refreshToken",
-      // })
-       res.status(200).redirect("http://localhost:3000/")
-      // res.redirect("http://localhost:3000/"+"?accessToken="+req.user.tokens.accessToken) -->without cookies shitty method:D
-    } catch (error) {
-      next(error)
-    }
-  }
-)
+//       res.cookie("accessToken", req.user.tokens.accessToken, {
+//         httpOnly: true,
+//       })
+//       // res.cookie("refreshToken", req.user.tokens.refreshToken, {
+//       //   httpOnly: true,
+//       //   path: "/authors/refreshToken",
+//       // })
+//        res.status(200).redirect("http://localhost:3000/")
+//       // res.redirect("http://localhost:3000/"+"?accessToken="+req.user.tokens.accessToken) -->without cookies shitty method:D
+//     } catch (error) {
+//       next(error)
+//     }
+//   }
+// )
 
 userRouter.get(
   "/googleLogin",

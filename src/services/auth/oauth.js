@@ -58,6 +58,7 @@ passport.use(
   
           if (user) {
             const tokens = await authenticate(user)
+            console.log("tokens",tokens)
             next(null, { user, tokens })
           } else {
           const newUser = {
