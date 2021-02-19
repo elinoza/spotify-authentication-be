@@ -10,10 +10,14 @@ const {
   genericErrorHandler,
 } = require("./errorHandlers");
 
+const userRoutes = require("./users/index");
+
 const server = express();
 
 server.use(cors());
 server.use(express.json());
+
+server.use("/users", userRoutes);
 
 server.use(badRequestHandler);
 server.use(forbiddenHandler);
