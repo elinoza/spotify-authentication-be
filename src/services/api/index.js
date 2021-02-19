@@ -3,7 +3,8 @@ const fetch = require("node-fetch");
 
 const artistRouter = express.Router();
 
-artistRouter.get("/artist", async (req, res, next) => {
+
+artistRouter.get("/", async (req, res, next) => {
   try {
     const response = await fetch(
       `https://deezerdevs-deezer.p.rapidapi.com/genre/` + "Rock" + `/artists`,
