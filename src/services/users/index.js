@@ -1,4 +1,5 @@
 const express = require("express");
+
 const UserSchema = require("./Schema");
 const passport = require("passport");
 const fetch = require("node-fetch");
@@ -6,27 +7,20 @@ const fetch = require("node-fetch");
 const { authenticate } = require("../auth/tools");
 const { authorize } = require("../auth/middleware");
 
+
 const userRouter = express.Router();
 
 // get all users
 userRouter.get("/", async (req, res, next) => {
   try {
-    let response = await fetch(
-      `https://deezerdevs-deezer.p.rapidapi.com/genre/` + "Rock" + `/artists`,
-      {
-        method: "GET",
-        headers: {
-          "x-rapidapi-key": process.env.API_KEY,
-          "x-rapidapi-host": "deezerdevs-deezer.p.rapidapi.com",
-        },
-      }
-    );
-    let artist = await response.json();
-    res.status(200).send(artist.data);
+    const users = await UserSchema.find();
+    res.status(200).send(users);
+
   } catch (error) {
     next(error);
   }
 });
+
 
 userRouter.get(
   "/spotifyLogin",
@@ -83,6 +77,8 @@ userRouter.get(
 
 // get single user
 userRouter.get("/me", authorize, async (req, res, next) => {
+
+
   try {
     res.send(req.user);
   } catch (error) {
@@ -91,7 +87,10 @@ userRouter.get("/me", authorize, async (req, res, next) => {
 });
 
 // edit user
+
 userRouter.put("/me", authorize, async (req, res, next) => {
+
+
   try {
     const updates = Object.keys(req.body);
     updates.forEach((update) => (req.user[update] = req.body[update]));
@@ -105,6 +104,7 @@ userRouter.put("/me", authorize, async (req, res, next) => {
 
 // delete user
 userRouter.delete("/me", authorize, async (req, res, next) => {
+
   try {
     await res.user.deleteOne();
     res.status(204).send("Delete");
@@ -112,6 +112,7 @@ userRouter.delete("/me", authorize, async (req, res, next) => {
     next(error);
   }
 });
+
 
 //post a new user
 userRouter.post("/", async (req, res, next) => {

@@ -15,6 +15,9 @@ const {
 
 const userRoutes = require("./services/users/index");
 
+const artistRoutes = require("./services/api/index");
+
+
 const server = express();
 
 
@@ -36,6 +39,7 @@ const corsOptions = {
 
 server.use(cors(corsOptions));
 server.use("/users", userRoutes);
+server.use("/artist", artistRoutes);
 
 server.use(badRequestHandler);
 server.use(forbiddenHandler);
