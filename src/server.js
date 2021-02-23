@@ -39,7 +39,7 @@ const corsOptions = {
 
 server.use(cors(corsOptions));
 server.use("/users", userRoutes);
-server.use("/artist", artistRoutes);
+server.use("/api", artistRoutes);
 
 server.use(badRequestHandler);
 server.use(forbiddenHandler);
